@@ -27,7 +27,8 @@ class Typologie
     {
         $this->vehicules = new ArrayCollection();
     }
-
+  
+    
     public function getId(): ?int
     {
         return $this->id;
