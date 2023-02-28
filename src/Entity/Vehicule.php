@@ -8,9 +8,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    denormalizationContext: [ 'groups' =>  ['write:vehicule']],
+    normalizationContext: ['groups' => ['read:marque', 'read:collection']]
+   )]
 class Vehicule
 {
     #[ORM\Id]
@@ -18,64 +22,83 @@ class Vehicule
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'vehicules')]
+    #[ORM\ManyToOne]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?Typologie $typologie = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?float $prix = null;
 
     #[ORM\ManyToMany(targetEntity: Status::class, inversedBy: 'vehicules')]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private Collection $status;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?int $kilometrage = null;
 
     #[ORM\ManyToOne]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?Boite $boite = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?float $dimensionLongeur = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?float $dimensionLargeur = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?float $dimensionHauteur = null;
 
     #[ORM\ManyToMany(targetEntity: Region::class, inversedBy: 'vehicules')]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private Collection $region;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['write:vehicule', 'read:marque'])]
     private ?Marque $marque = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(nullable: true, type: Types::DATE_MUTABLE) ]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?\DateTimeInterface $annee = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?NombreCouchage $nombreCouchage = null;
 
     #[ORM\ManyToMany(targetEntity: TypeCouchage::class, inversedBy: 'vehicules')]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private Collection $typeCouchage;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?Energie $energie = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(nullable: true, length: 255)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?string $modele = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?int $pvom = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?int $ptac = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?int $chargeUtile = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    #[Groups(['write:vehicule', 'read:collection'])]
     private ?int $garantie = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EnergieRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: EnergieRepository::class)]
 #[ApiResource()]
@@ -16,6 +17,8 @@ class Energie
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['read:collection'])]
+
     private ?string $typeEnergie = null;
 
     public function getId(): ?int

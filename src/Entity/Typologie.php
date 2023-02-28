@@ -7,28 +7,24 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypologieRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:collection']],
+)]
 class Typologie
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read:collection'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read:collection'])]
     private ?string $typeVehicule = null;
 
-    #[ORM\OneToMany(mappedBy: 'typologie', targetEntity: Vehicule::class)]
-    private Collection $vehicules;
-
-    public function __construct()
-    {
-        $this->vehicules = new ArrayCollection();
-    }
-  
-    
     public function getId(): ?int
     {
         return $this->id;
